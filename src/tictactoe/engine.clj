@@ -170,18 +170,10 @@
 	)
 )
 
-(defn game-loop
-  "Full game loop."
-  [size first-player]
-  (let [board (new-board size first-player)]
-  	(player-turn board)
-  )
-)
-
 (defn -main [& args]
 	(let [
 		size (prompt "What size would you like the board to be? [3-N]")
 		first-player (prompt "Who would you like to go first? [O or X]")
 	]
-	(game-loop (parse-int size) first-player))
+	(player-turn (new-board (parse-int size) first-player)))
 )
