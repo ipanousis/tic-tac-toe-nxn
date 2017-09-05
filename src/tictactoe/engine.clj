@@ -4,6 +4,18 @@
 ;; We use two 1-dimensional boolean-type arrays to store the moves each player has made on the board.
 ;;
 
+;
+; Some test commands, for lack of time to implement proper tests
+; --------------
+;
+; (print-board (new-board 3 "O"))
+; (follow-direction [0 0] [0 1] 3)
+; (generate-directions 3)
+; (call-winner (apply-move (new-board 3 "O") (get-move (new-board 3 "O"))))
+; (player-turn (new-board 3 "O"))
+; (game-loop 3 "O")
+;
+
 (ns tictactoe.engine)
 
 (use '[clojure.string :only (split)])
@@ -19,14 +31,18 @@
 	"Prints the board in a human-readable format."
 	[{:keys [x-blocks o-blocks size] :as board}]
 	(let [pretty-board (map map-or
-		(map deserialise x-blocks (repeat (* size size) "X"))
-		(map deserialise o-blocks (repeat (* size size) "O")))]
+		(map deserialise x-blocks (repeat (* size size) " X "))
+		(map deserialise o-blocks (repeat (* size size) " O ")))]
 		(println "")
 		(println "-------------------")
 		(println "")
-		(doseq [item (partition size pretty-board)]
-			(println item)
-		)
+		(println "   " (clojure.string/join "" (map (fn[x] (format " [%d]" x)) (range 1 (inc size)))))
+		(loop [partitions (partition size pretty-board) cnt 1]
+			(println (format "[%d]" cnt) (first partitions))
+			(if (= cnt size)
+			nil
+			(recur (rest partitions) (inc cnt))
+		))
 	)
 	board)
 
@@ -40,19 +56,18 @@
 
 (defn get-move
 	[{:keys [size] :as board}]
-	(let [move (prompt (format "What's your move? [row col] [0-%d 0-%d]" size size))]
-		(map parse-int (split move #"\s+"))
+	(let [move (prompt (format "What's your move? [row col] [1-%d 1-%d]" size size))]
+		(map dec (map parse-int (split move #"\s+")))
 	))
 
 (defn get-next-player
 	[{:keys [o-blocks x-blocks first-player] :as board}]
 	(let [
-		o-count (get (frequencies o-blocks) true 0)
-		x-count (get (frequencies x-blocks) true 0)]
-		(case
-			(and (<= o-count x-count) (= first-player "O"))
+		o-count (count (filter true? o-blocks))
+		x-count (count (filter true? x-blocks))]
+		(case (< o-count x-count)
 			true "O"
-			false "X"
+			false (if (> o-count x-count) "X" first-player)
 		)
 	))
 
@@ -92,8 +107,6 @@
 		(recur (conj positions (map + (last positions) direction)))
 	)))
 
-(follow-direction [0 0] [0 1] 3)
-
 (defn generate-directions
 	[size]
 	(let [
@@ -125,6 +138,7 @@
 	(or
 		(first (filter (comp not false?) (map (fn [d] (call-winner-in-direction o-blocks size d "O")) (generate-directions size))))
 		(first (filter (comp not false?) (map (fn [d] (call-winner-in-direction x-blocks size d "X")) (generate-directions size))))
+		(and (= 0 (count (filter false? (map map-or x-blocks o-blocks)))) "D")
 	)
 )
 
@@ -150,15 +164,11 @@
 		(case (call-winner board)
 			"X" (println "Crosses have won!")
 			"O" (println "Noughts have won!")
+			"D" (println "It's a draw!")
 			(recur board)
 		)
 	)
 )
-
-; (follow-direction [0 0] [0 1] 3)
-; (generate-directions 3)
-; (call-winner (apply-move (new-board 3 "O") (get-move (new-board 3 "O"))))
-; (player-turn (new-board 3 "O"))
 
 (defn game-loop
   "Full game loop."
@@ -168,12 +178,10 @@
   )
 )
 
-; (defn -main [& args]
-; 	(let [
-; 		size (prompt "What size would you like the board to be? [3-N]")
-; 		first-player (prompt "Who would you like to go first? [O or X]")
-; 	]
-; 	(game-loop size "O"))
-; )
-
-(game-loop 3 "O")
+(defn -main [& args]
+	(let [
+		size (prompt "What size would you like the board to be? [3-N]")
+		first-player (prompt "Who would you like to go first? [O or X]")
+	]
+	(game-loop (parse-int size) first-player))
+)
