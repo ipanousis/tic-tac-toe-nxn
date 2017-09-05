@@ -18,7 +18,15 @@ Tic-tac-toe implemented in Clojure.
 
 - Any non-happy path handling whatsoever, e.g. throw failure using pre/post conditions when field to mark is already marked or a while loop in the prompt when user enters bad input
 - Computer player
-- Tests!
+
+## What needs testing
+
+- (print-board (new-board 3 "O"))
+- (follow-direction [some starting points] [some directions] [with some different board sizes])
+- (generate-directions [with some different board sizes])
+- (apply-move (new-board 3 [with both players as first players]) [with some different moves])
+- (call-winner [with a number of different boards])
+- (player-turn [with a number of different boards])
 
 ## License
 
