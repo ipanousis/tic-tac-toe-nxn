@@ -1,17 +1,25 @@
 # tictactoe
 
-A Clojure library designed to ... well, that part is up to you.
+Tic-tac-toe implemented in Clojure.
 
 ## Usage
 
-## TODO
+- Checkout the repo
+- Install [lein](https://leiningen.org/#install)
+- In the project root run `lein trampoline run`
 
-- Throw failure using pre/post conditions when field to mark is already marked
-- Throw failure using pre/post conditions when game is already won
+## Implemented so far
+
+- NxN board support
+- Can select to start as O or as X
+- Draw
+
+## Not implemented
+
+- Any non-happy path handling whatsoever, e.g. throw failure using pre/post conditions when field to mark is already marked or a while loop in the prompt when user enters bad input
+- Computer player
+- Tests!
 
 ## License
 
-Copyright © 2017 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Apache 2.0. See LICENSE for details
