@@ -1,6 +1,6 @@
 # tictactoe
 
-Tic-tac-toe implemented in Clojure.
+Tic-tac-toe implemented in Clojure in the CLI.
 
 ## Usage
 
@@ -22,6 +22,7 @@ Tic-tac-toe implemented in Clojure.
 ## What needs testing
 
 - (print-board (new-board 3 "O"))
+- (call-winner-in-direction `[one block with sufficient potential]` `[some board sizes]` `[some directions]` `[the two players]`)
 - (follow-direction `[some starting points]` `[some directions]` `[with some different board sizes]`)
 - (generate-directions `[with some different board sizes]`)
 - (apply-move (new-board 3 `[with both players as first players]`) `[with some different moves]`)
