@@ -1,7 +1,5 @@
 (defproject tictactoe "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
+  :description "Tic-tac-toe 3x3 4x4 NxN"
   :url "http://example.com/FIXME"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
   :main tictactoe.engine
   :dependencies [[org.clojure/clojure "1.8.0"]])
